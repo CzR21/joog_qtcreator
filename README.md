@@ -1,0 +1,1 @@
+# joog_qtcreator
