@@ -3,7 +3,7 @@
 #include <QGraphicsSceneMouseEvent>
 #include "bird.h"
 
-Scene::Scene(QObject *parent) : QGraphicsScene(parent), gamoOn(false), score(0), bestSocre(0), gameOverPix(nullptr)
+Scene::Scene(QObject *parent) : QGraphicsScene(parent), gamoOn(false), score(0), bestSocre(0), gameOverPix(nullptr), scoreTextItem(nullptr)
 {
     setUpPillarTimer();
     addBird();
@@ -96,14 +96,38 @@ void Scene::showGameOverGraphics()
 
     addItem(gameOverPix);
     gameOverPix->setPos(QPoint(0,0) - QPointF(gameOverPix->boundingRect().width()/2, gameOverPix->boundingRect().height()/2));
+
+    scoreTextItem = new QGraphicsTextItem();
+
+    QString htmlString = "<p><b>Socre: " + QString::number(score) + "</b></p>" + "<p><b>Best socre: " + QString::number(bestSocre) + "</b></p>";
+
+    QFont font("Consolas", 100, QFont::Bold);
+
+    QColor backgroundColor(244,164,96);
+
+    scoreTextItem->setHtml(htmlString);
+    scoreTextItem->setFont(htmlString);
+    scoreTextItem->setDefaultTextColor(backgroundColor);
+
+    addItem(scoreTextItem);
+
+    scoreTextItem->setPos(QPoint(0,0) - QPointF(gameOverPix->boundingRect().width()/2, gameOverPix->boundingRect().height()/2-60));
 }
 
 void Scene::hideGameOverGraphics()
 {
+    score = 0;
+
     if(gameOverPix){
         removeItem(gameOverPix);
         delete gameOverPix;
         gameOverPix = nullptr;
+    }
+
+    if(scoreTextItem){
+        removeItem(scoreTextItem);
+        delete scoreTextItem;
+        scoreTextItem = nullptr;
     }
 }
 
